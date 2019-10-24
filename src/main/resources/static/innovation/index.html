@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv='Content-Type' content='text/html;charset=UTF-8'/>
+
+    <script src="./resources/sap-ui-core.js"
+            id="sap-ui-bootstrap"
+            data-sap-ui-libs="sap.m, sap.ui.table"
+            data-sap-ui-theme="sap_bluecrystal">
+    </script>
+
+    <script>
+        // application data
+        var oAppData =
+            {
+                "CountSuppliers" : 2,
+                "Suppliers" : [{
+                    "purchaseOrder": 1,
+                    "companyCode": "中国图书进出口公司",
+                    "purchaseOrderType": "NB"
+                }
+                ]
+            };
+
+        var oModel = sap.ui.model.json.JSONModel();
+        oModel.setData(oAppData);
+
+        // setting the model to the core
+        // so that it's available to the whole application
+        sap.ui.getCore().setModel(oModel);
+
+        // define columns and table
+        var oIdCol = new sap.ui.table.Column({
+            label: new sap.m.Label({text:"ID"}),
+            template: new sap.m.Text().bindProperty("text", "purchaseOrder"),
+            sortProperty: "purchaseOrder"
+        });
+        var oIdCol = new sap.ui.table.Column({
+            label: new sap.m.Label({text:"ID"}),
+            template: new sap.m.Text().bindProperty("text", "purchaseOrderType"),
+            sortProperty: "purchaseOrderType"
+        });
+
+
+
+        var oNameCol = new sap.ui.table.Column({
+            label: new sap.m.Label({text:"Name"}),
+            template: new sap.m.Text().bindProperty("text", "companyCode"),
+            sortProperty: "companyCode"
+        });
+
+        var oTable = new sap.ui.table.Table({
+            width: "100%",
+            title: "供应商列表",
+            visibleRowCount: 2,
+            firstVisibleRow: 0,
+            editable: false,
+            selectionMode: sap.ui.table.SelectionMode.Single,
+            columns: [oIdCol, oNameCol]
+        });
+
+        oTable.setModel(oModel);
+        oTable.bindRows("/Suppliers");
+
+        // define page & app
+        var oPage = new sap.m.Page("masterpage", {
+            title: "供应商",
+            content: [oTable]
+        });
+
+        var oApp = new sap.m.App("myApp");
+
+        oApp.addPage(oPage);
+        oApp.placeAt("content");
+
+    </script>
+
+</head>
+<body class="sapUiBody SapUiResponsiveMargin" role="application">
+<div id="content"></div>
+</body>
+</html>

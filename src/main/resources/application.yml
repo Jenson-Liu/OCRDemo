@@ -1,0 +1,13 @@
+server:
+  port: 8080
+  servlet:
+    session:
+      timeout: 1800
+spring:
+  thymeleaf:
+    prefix: classpath:/templates/
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+      location: /data/upload_tmp

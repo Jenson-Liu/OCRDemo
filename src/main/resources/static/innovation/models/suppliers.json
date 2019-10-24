@@ -1,0 +1,11 @@
+{
+  "CountSuppliers" : 2,
+  "Suppliers" : [{
+    "ID": 1,
+    "Name": "中国图书进出口公司"
+  }, {
+    "ID": 2,
+    "Name": "东莞少儿玩具制造厂"
+  }
+  ]
+}
