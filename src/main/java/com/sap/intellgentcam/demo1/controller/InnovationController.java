@@ -1,14 +1,9 @@
 package com.sap.intellgentcam.demo1.controller;
 
-import com.sap.intellgentcam.demo1.tool.ApiTool;
-import com.sap.intellgentcam.demo1.tool.ImgTool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import java.io.*;
 
 /**
  * @author : Jenson.Liu
@@ -20,23 +15,34 @@ public class InnovationController {
 
     private static final Logger logger = LoggerFactory.getLogger(InnovationController.class);
 
-
-    @RequestMapping(value = "/index",method = RequestMethod.GET)
+    @RequestMapping(value = "/camera",method = RequestMethod.GET)
     public String GetStart(){
-        return "Camera/index";
+        return "Camera/camera";
     }
 
-
+    @RequestMapping(value = "/index",method = RequestMethod.GET)
+    public String GetStart2(){
+        return "Camera/showcamera";
+    }
 
     @RequestMapping(value = "/edit",method = RequestMethod.GET)
-    public String GetEdit(){
+    public String getEdit(){
         return "Camera/edit";
     }
 
     @RequestMapping(value = "/display",method = RequestMethod.GET)
-    public String GetDisplay(){
+    public String getDisplay(@RequestParam("poNum")String poNum){
         return "Camera/display";
     }
 
+    @RequestMapping(value = "/cropper",method = RequestMethod.GET)
+    public String GetCropper(){
+        return "Camera/cropper.html";
+    }
+
+//    @RequestMapping(value = "/index",method = RequestMethod.GET)
+//    public String video(){
+//        return "Camera/loading.html";
+//    }
 }
 

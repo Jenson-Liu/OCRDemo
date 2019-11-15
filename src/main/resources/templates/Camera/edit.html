@@ -1,88 +1,124 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE HTML>
+<html>
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="JavaScript image cropper.">
-  <meta name="author" content="Chen Fengyuan">
-  <title>Cropper.js</title>
-  <link rel="stylesheet" href="../../css/all.css">
-  <link rel="stylesheet" href="../../css/bootstrap.min.css">
-  <link rel="stylesheet" href="../../css/cropper.css">
-  <link rel="stylesheet" href="../../css/main.css">
-  <script src="../../js/jquery-3.4.1.slim.min.js"></script>
-  <script src="../../js/bootstrap.bundle.min.js"></script>
-  <script src="../../js/google-analytics.js"></script>
-  <script src="../../innovation/cropper.js"></script>
-  <script src="../../innovation/main.js"></script>
-  <script type="text/javascript" src="../../innovation/axios.min.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv='Content-Type' content='text/html;charset=UTF-8'/>
+
+    <script src="/innovation/resources/sap-ui-core.js"
+            id="sap-ui-bootstrap"
+            data-sap-ui-libs="sap.m, sap.ui.table, sap.ui.layout"
+            data-sap-ui-theme="sap_bluecrystal"
+            data-sap-ui-resourceroots='{"innovation": "/innovation/"}'>
+    </script>
+    <link  href="/css/cropper.min.css" rel="stylesheet">
+    <link  href="/css/loading.css" rel="stylesheet">
+    <script src="/js/cropper.min.js"></script>
+    <script type="text/javascript" src="/innovation/axios.min.js"></script>
+    <script src="/innovation/jquery.js"></script>
+    <style>
+        #__image1 {
+            display: inline-block;
+            width: 200px;
+            height: 200px;
+            overflow: hidden;
+        }
+    </style>
 </head>
-<body>
+<body class="sapUiBody" role="application">
+<div id="content">
 
+</div>
+<div class="loading">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+</div>
 <script>
-  function getImg() {
-    axios.get('/innovation/getImg')
+    sap.ui.getCore().attachInit(function(){
+        const oButton = new sap.m.Button({
+            text: "Recognize PO Number",
+        });
+
+        const oImage = new sap.m.Image({
+            width: "400px",
+            height: "400px",
+        });
+        const oImage2 = new sap.m.Image({
+            width: "400px",
+            height: "400px",
+        });
+
+        const oForm = new sap.ui.layout.form.SimpleForm({
+            content: [
+                new sap.m.Label({text: "Captured Picture"}),
+                oImage,
+
+                new sap.m.Label({text: "Selected Purchase Order Number"}),
+                oImage2
+            ]
+        });
+
+        var oApp = new sap.m.App({
+            pages: [
+                new sap.m.Page("categoryPage", {
+                    title: "Select Purchase Order in Captured Delivery Note",
+                    content: [
+                        new sap.m.Panel({
+                            content: [oButton]
+                        }),
+                        new sap.m.Panel({
+                            content: [oForm]
+                        }),
+
+                    ]
+                })
+            ]
+        });
+
+        axios.get('/innovation/getImg')
             .then(function (response) {
-              console.log(response.data);
-              $('#inputImage').attr("src",response.data);
-            })
-            .catch(function (error) {
-              console.log(error);
+                const image = document.getElementById("__image0");
+                const options = {
+                    aspectRatio: 16 / 9,
+                    // preview: '#__image1-cont0_1',
+                    preview: '#__image1',
+                    viewMode: 1
+                };
+                let cropper = new Cropper(image, options);
+                let base64 = response.data;
+                image.onload = function () {
+                    if (cropper) cropper.destroy();
+                    cropper = new Cropper(image, options);
+                    document.getElementById("__button0-BDI-content").addEventListener("click", function() {
+                        const canvas = cropper.getCroppedCanvas();
+                        const downloadImageSrc = canvas.toDataURL();
+                        const param = new FormData();
+                        param.append("editImg",downloadImageSrc);
+                        axios({
+                            method: 'post',
+                            url: '/innovation/postImg',
+                            data: param,
+                            beforeSend: $('.loading').fadeIn()
+                        }).then(function (response) {
+                            const data = response.data.toString();
+                            if(data !=null){
+                                window.location.href="/innovation/display?poNum="+data;
+                            }else {
+                                window.location.href="/innovation/display";
+                            }
+
+                        })
+                    });
+                };
+                image.src = base64;
+
             });
-  }
+        sap.ui.getCore().byId("categoryPage").bindElement("/Categories(1)");
+        oApp.placeAt("content");
+    });
 
-  getImg();
 </script>
-
-  <div class="container">
-    <div class="row">
-      <div class="col-md-9">
-        <!-- <h3>Demo:</h3> -->
-        <div class="img-container">
-          <img src="" alt="Picture" id="inputImage">
-        </div>
-      </div>
-    </div>
-    <div class="row" id="actions">
-      <div class="col-md-9 docs-buttons">
-        <div class="btn-group btn-group-crop">
-          <button type="button" class="btn btn-success" data-method="getCroppedCanvas" data-option="{ &quot;width&quot;: 320, &quot;height&quot;: 180 }">
-<!--            <span class="docs-tooltip" data-toggle="tooltip" title="cropper.getCroppedCanvas({ width: 320, height: 180 })">-->
-                <span>
-          execute
-            </span>
-          </button>
-        </div>
-        <!-- Show the cropped image in modal -->
-        <div class="modal fade docs-cropped" id="getCroppedCanvasModal" role="dialog" aria-hidden="true" aria-labelledby="getCroppedCanvasTitle" tabindex="-1">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="getCroppedCanvasTitle">Cropped</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body"></div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-<!--                <a class="btn btn-primary" id="download" href="javascript:void(0);" download="cropped.jpg">Download</a>-->
-                <a class="btn btn-primary" id="download" href="javascript:void(0);">Download</a>
-              </div>
-            </div>
-          </div>
-        </div><!-- /.modal -->
-
-      </div><!-- /.docs-buttons -->
-
-      <div class="col-md-3 docs-toggles">
-
-        <div class="btn-group d-flex flex-nowrap" data-toggle="buttons">
-        </div>
-      </div><!-- /.docs-toggles -->
-    </div>
-  </div>
-
 </body>
 </html>

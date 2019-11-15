@@ -1,0 +1,175 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv='Content-Type' content='text/html;charset=UTF-8'/>
+
+    <script src="/innovation/resources/sap-ui-core.js"
+            id="sap-ui-bootstrap"
+            data-sap-ui-libs="sap.m, sap.ui.table, sap.ui.layout"
+            data-sap-ui-theme="sap_bluecrystal">
+    </script>
+    <link  href="/css/loading.css" rel="stylesheet">
+    <script type="text/javascript" src="/innovation/axios.min.js"></script>
+    <script type="text/javascript" src="/js/jquery1.71.1.js"></script>
+
+    <style>
+        #__image0-cont0_1{
+            height: auto;
+            width: auto;
+        }
+
+        #outrec {
+            width: 450px;
+            height: 300px;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+    <script>
+        sap.ui.getCore().attachInit(function(){
+            const onButtonPressed = function(oEvent) {
+                var outrec = document.getElementById("outrec");
+                var outreccon = outrec.getContext("2d");
+                var video = document.getElementById('video');
+                console.log(video.offsetHeight);
+                console.log(video.offsetWidth);
+                outreccon.drawImage(video, 0, 0, 640,
+                    480);
+                var img = outrec.toDataURL("image/jpeg", 0.5);
+                $('#imgvideo').attr('src', img);
+                var canvas = document.querySelector("#outrec");
+                var url = canvas.toDataURL('image/jpeg');
+                console.log(url);
+                alert("Delivery Note Captured");
+                const param = new FormData();
+                param.append("href",url);
+                $.ajax({
+                    url: "/innovation/importImg",//请求地址
+                    data: param,
+                    type: "post",//提交的方式
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        window.location.href="/innovation/edit";
+                    }
+                });
+            };
+
+            const oButton = new sap.m.Button({
+                text: "Capture",
+                press: onButtonPressed
+            });
+
+            const oImage = new sap.m.Image({
+                width: "450px",
+                height: "300px",
+            });
+
+            const oForm = new sap.ui.layout.form.SimpleForm({
+                content: [
+                    new sap.m.Label({text: "picture"}),
+                    oImage,
+                ]
+            });
+
+            const oApp = new sap.m.App({
+                pages: [
+                    new sap.m.Page("categoryPage", {
+                        title: "Intelligent Inbound Delivery Processing",
+                        content: [
+                            new sap.m.Panel({
+                                content: [oButton]
+                            }),
+                            new sap.m.Panel({
+                                content: [oForm]
+                            }),
+                        ]
+                    })
+                ]
+            });
+            sap.ui.getCore().byId("categoryPage").bindElement("/Categories(1)");
+            oApp.placeAt("content");
+
+        });
+        // window.onload = function(){
+        //     const n = document.getElementsByTagName('div').length;
+        //     var i;
+        //     for(i=0; i<n; i++){
+        //         console.log(document.getElementsByTagName('div')[i])
+        //     }
+        // };
+         function loadCamera(){
+            // document.getElementById("__panel0-content").innerHTML=
+            //     "<div class=\"controls\">\n" +
+            //     "      <button id=\"button\">Get camera</button>\n" +
+            //     "      <select id=\"select\">\n" +
+            //     "        <option></option>\n" +
+            //     "      </select>\n" +
+            //     "    </div>";
+             document.getElementById("__image0-cont0_1").innerHTML =
+             "<div class=\"controls\">\n" +
+             "      <button id=\"button\" onclick='getCamera()'>Get camera</button>\n" +
+             "      <select id=\"select\">\n" +
+             "        <option></option>\n" +
+             "      </select>\n" +
+             "    </div>"+
+             "<video id=\"video\"  width=\"640\" height=\"480\" autoplay playsinline></video>" +
+             "<canvas width=\"640\" height=\"480\" id=\"outrec\"></canvas>";
+        }
+        $(function (){
+            setTimeout("loadCamera()",300);
+        });
+        $(function (){
+            setTimeout("getCamera()",500);
+        });
+        // document.ready = function () {
+        //     console.log(document.getElementById("__image0-cont0_1"));
+        //     document.getElementById("__image0-cont0_1").innerHTML =
+        //         "<div class=\"controls\">\n" +
+        //         "      <button id=\"button\">Get camera</button>\n" +
+        //         "      <select id=\"select\">\n" +
+        //         "        <option></option>\n" +
+        //         "      </select>\n" +
+        //         "    </div>"+
+        //         "<video id=\"video\"  width=\"640\" height=\"480\" autoplay playsinline></video>" +
+        //         "<canvas width=\"640\" height=\"480\" id=\"outrec\"></canvas>";
+        // };
+        function getCamera() {
+                if (typeof currentStream !== 'undefined') {
+                    stopMediaTracks(currentStream);
+                }
+                const videoConstraints = {};
+                if (select.value === '') {
+                    videoConstraints.facingMode = 'environment';
+                } else {
+                    videoConstraints.deviceId = {exact: select.value};
+                }
+                const constraints = {
+                    video: videoConstraints,
+                    audio: false
+                };
+                navigator.mediaDevices.getUserMedia(constraints)
+                    .then(stream => {
+                        currentStream = stream;
+                        video.srcObject = stream;
+                        return navigator.mediaDevices.enumerateDevices();
+                    })
+                    .then(gotDevices)
+                    .catch(error => {
+                        console.error(error);
+                    });
+        }
+        // debugger;      window.onload = function(){
+
+
+    </script>
+
+</head>
+<body class="sapUiBody" role="application">
+<div id="content"></div>
+<!--<script type="text/javascript" src="/js/camera.js"></script>-->
+
+</body>
+</html>

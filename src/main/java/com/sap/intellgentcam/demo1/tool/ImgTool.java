@@ -2,7 +2,12 @@ package com.sap.intellgentcam.demo1.tool;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import org.apache.tomcat.util.codec.binary.Base64;
 
 /**
@@ -16,7 +21,6 @@ public class ImgTool {
             return false;
         }
         try {
-            // Base64解码
             byte[] b = Base64.decodeBase64(imgStr);
             for (int i = 0; i < b.length; ++i) {
                 if (b[i] < 0) {
@@ -35,12 +39,22 @@ public class ImgTool {
     }
 
     /**
-     * 验证字符串是否为空
+     * check the String if not null
      *
      * @param input
      * @return
      */
     private static boolean isEmpty(String input) {
         return input == null || input.equals("");
+    }
+
+    public static String transferToBase64(String path) {
+        try {
+            byte[] bytes = Files.readAllBytes(Paths.get(path));
+            return Base64.encodeBase64String(bytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

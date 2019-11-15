@@ -168,13 +168,14 @@ window.onload = function () {
           break;
 
         case 'getCroppedCanvas':
+          console.log("execute");
           try {
             data.option = JSON.parse(data.option);
           } catch (e) {
             console.log(e.message);
           }
 
-          if (uploadedImageType === 'image/jpeg') {
+          if (uploadedImageType === 'image/png') {
             if (!data.option) {
               data.option = {};
             }
@@ -201,21 +202,19 @@ window.onload = function () {
           break;
 
         case 'getCroppedCanvas':
+          console.log("execute");
+
           if (result) {
+            console.log("execute");
+
             // Bootstrap's Modal
             // $('#getCroppedCanvasModal').modal().find('.modal-body').html(result);
 
             if (!download.disabled) {
+              console.log("execute");
               // download.download = uploadedImageName;
               download.href = result.toDataURL(uploadedImageType);
-              var param = new FormData();
-              param.append("href",download.href);
-              axios({
-                method: 'post',
-                url: '/innovation/postImg',
-                data: param
-              });
-              window.location.href="/innovation/display";
+
             }
           }
 
@@ -272,7 +271,12 @@ window.onload = function () {
         break;
     }
   };
-
+  function sleep(milliSeconds) {
+    var startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + milliSeconds) {
+      console.log(new Date().getTime());
+    }//暂停一段时间 10000=1S。
+  }
   // Import image
   var inputImage = document.getElementById('inputImage');
 

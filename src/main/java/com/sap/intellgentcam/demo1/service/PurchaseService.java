@@ -1,5 +1,7 @@
 package com.sap.intellgentcam.demo1.service;
 
+import com.sap.cloud.sdk.odatav2.connectivity.ODataException;
+import com.sap.cloud.sdk.s4hana.datamodel.odata.namespaces.purchaseorder.PurchaseOrder;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +16,8 @@ public interface PurchaseService {
      * find purchase order in system
      * @param poNum
      * @return
+     * @throws ODataException
      */
-    public String getPurchase(String poNum);
+    public PurchaseOrder getPurchase(String poNum) throws ODataException;
 
-    String getPurchase(Logger logger);
 }

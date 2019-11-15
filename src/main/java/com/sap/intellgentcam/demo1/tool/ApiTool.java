@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author : Jenson.Liu
@@ -22,6 +23,11 @@ public class ApiTool {
     public static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
 
+    /**
+     * get this session to call ml api
+     * @return
+     * @throws IOException
+     */
     public static String getSessionToken() throws IOException {
         OkHttpClient client = new OkHttpClient();
         HashMap<String,String> hashMap = new HashMap<>();
@@ -52,13 +58,16 @@ public class ApiTool {
 
     /**
      * transfer img to order num
+     * to get what view in img
      * @param fileName
      * @param access_token
      * @return
      * @throws IOException
      */
-    public static String testToken(String fileName,String access_token) throws IOException {
-        OkHttpClient client = new OkHttpClient();
+    public static String TransferImg(String fileName, String access_token) throws IOException {
+        OkHttpClient client =  new OkHttpClient().newBuilder().connectTimeout(30000, TimeUnit.MILLISECONDS)
+                .readTimeout(30000, TimeUnit.MILLISECONDS)
+                .build();
         String url = "https://mlftrial-fs-ocr.cfapps.eu10.hana.ondemand.com/api/v2/image/ocr";
         File file =  new File(fileName);
         RequestBody fileBody = RequestBody.create(MEDIA_TYPE_PNG,file);
@@ -81,5 +90,7 @@ public class ApiTool {
         String jsonString = response.body().string();
         return jsonString;
     }
+
+
 
 }

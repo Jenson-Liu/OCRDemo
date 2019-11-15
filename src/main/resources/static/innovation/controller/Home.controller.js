@@ -14,16 +14,14 @@ sap.ui.define([
 
 
         onSnapshot: function (oEvent) {
-            // The image is inside oEvent, on the image parameter,
-            // let's grab it.
-            var oModel = this.getView().getModel();
-            var aPhotos = oModel.getProperty("/photos");
+            const oModel = this.getView().getModel();
+            const aPhotos = oModel.getProperty("/photos");
             aPhotos.push({src: oEvent.getParameter("image")});
-            var file = oEvent.getParameter("image");
+            const file = oEvent.getParameter("image");
             console.log(oEvent.getParameter("image"));
             oModel.setProperty("/photos", aPhotos);
             oModel.refresh(true);
-            var param = new FormData();
+            const param = new FormData();
             param.append("file",file);
             $.ajax({
                 url: "/innovation/importImg",//请求地址
@@ -32,8 +30,8 @@ sap.ui.define([
                 cache: false,
                 processData: false,
                 contentType: false,
-                success: function (data) {   // 这里的data就是json格式的数据
-                    window.location.href="/innovation/edit";
+                success: function (data) {
+                    // window.location.href="/innovation/edit";
                 }
             });
         },
@@ -52,7 +50,5 @@ sap.ui.define([
                 oCamera.rerender();
             }
         }
-
-
     });
 });

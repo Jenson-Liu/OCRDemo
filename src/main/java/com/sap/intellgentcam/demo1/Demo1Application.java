@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import javax.servlet.MultipartConfigElement;
 
@@ -13,6 +14,7 @@ import javax.servlet.MultipartConfigElement;
  */
 @ServletComponentScan({"com.sap.cloud.sdk"})
 @SpringBootApplication
+@Configuration
 public class Demo1Application {
 
     public static void main(String[] args) {
@@ -23,11 +25,11 @@ public class Demo1Application {
      * 文件上传配置
      * @return
      */
-    @Bean
-    public MultipartConfigElement multipartConfigElement() {
-        MultipartConfigFactory factory = new MultipartConfigFactory();
-        factory.setMaxRequestSize("102400KB");
-        return factory.createMultipartConfig();
-    }
+//    @Bean
+//    public MultipartConfigElement multipartConfigElement() {
+//        MultipartConfigFactory factory = new MultipartConfigFactory();
+//        factory.setMaxRequestSize("102400KB");
+//        return factory.createMultipartConfig();
+//    }
 
 }

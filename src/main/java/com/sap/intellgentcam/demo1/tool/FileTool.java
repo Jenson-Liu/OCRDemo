@@ -10,7 +10,7 @@ import java.io.*;
  */
 public class FileTool {
 
-    public static File MultipartFiletoFile(MultipartFile multipartFile) {
+    public static File multipartFiletofile(MultipartFile multipartFile) {
         File file = null;
         InputStream ins = null;
         try {
