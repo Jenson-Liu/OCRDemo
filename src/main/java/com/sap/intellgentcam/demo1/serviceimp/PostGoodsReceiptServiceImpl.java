@@ -73,15 +73,30 @@ public class PostGoodsReceiptServiceImpl implements PostGoodsReceiptService {
                 .post(requestBody)
                 .build();
         Response response = null;
-        boolean result = true;
-        try{
+        try {
             response = client.newCall(request).execute();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        result = response.isSuccessful();
-        logger.info("putAway success:"+result);
-        return result;
+        try {
+            logger.info("putAway success:"+response.isSuccessful());
+            logger.info("putAway body:"+response.body().string());
+            logger.info("putAway message:"+response.message());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+//        boolean result = true;
+//        try{
+//            response = client.newCall(request).execute();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        logger.info(String.valueOf(response.isSuccessful()));
+//        logger.info(response.body().string());
+//        result = ;
+//        logger.info("putAway success:"+result);
+        return response.isSuccessful();
     }
 
     @Override
@@ -139,7 +154,10 @@ public class PostGoodsReceiptServiceImpl implements PostGoodsReceiptService {
             e.printStackTrace();
         }
         boolean result = response.isSuccessful();
-        if(result = true){
+        logger.info("PGR:"+result);
+        logger.info("PGR Info:"+response.body());
+
+        if(result == true){
             return "Post Goods Receipt Successfully";
         }else {
             return "Unable to Post Goods Receipt";

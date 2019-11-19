@@ -16,9 +16,10 @@ import org.apache.tomcat.util.codec.binary.Base64;
  */
 public class ImgTool {
 
-    public static boolean Base64ToImage(String imgStr,String imgFilePath) { // 对字节数组字符串进行Base64解码并生成图片
+    public static File Base64ToImage(String imgStr,String imgFilePath) { // 对字节数组字符串进行Base64解码并生成图片
+        File file = new File(imgFilePath);
         if (isEmpty(imgStr)) {
-            return false;
+            return null;
         }
         try {
             byte[] b = Base64.decodeBase64(imgStr);
@@ -27,14 +28,14 @@ public class ImgTool {
                     b[i] += 256;
                 }
             }
-            OutputStream out = new FileOutputStream(imgFilePath);
+            OutputStream out = new FileOutputStream(file);
             out.write(b);
             out.flush();
             out.close();
 
-            return true;
+            return file;
         } catch (Exception e) {
-            return false;
+            return null;
         }
     }
 

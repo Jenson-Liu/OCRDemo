@@ -31,8 +31,10 @@ public class PurchaseController {
 
     @Autowired
     PurchaseService purchaseService;
+
     @Autowired
     PostGoodsReceiptService postGoodsReceiptService;
+
     @Autowired
     RedisService redisService;
 
@@ -88,16 +90,14 @@ public class PurchaseController {
         try {
             if(poNum.equals("")){
                 hashMap.put("PurchaseOrder",poNum);
-                String uploadDir = ResourceUtils.getURL("classpath:").getPath()+"static/images/";
-                hashMap.put("editImg", "data:image/jpeg;base64,"+ImgTool.transferToBase64(uploadDir+"/afterEdit.png"));
+                hashMap.put("editImg",redisService.getString("editImg"));
                 return new AjaxVO(false,"Recognition of Purchase Order No. Failed",hashMap);
             }else {
                 purchaseOrder = purchaseService.getPurchase(poNum);
             }
         } catch (Exception e) {
             hashMap.put("PurchaseOrder",poNum);
-            String uploadDir = ResourceUtils.getURL("classpath:").getPath()+"static/images/";
-            hashMap.put("editImg", "data:image/jpeg;base64,"+ImgTool.transferToBase64(uploadDir+"/afterEdit.png"));
+            hashMap.put("editImg",redisService.getString("editImg"));
             return new AjaxVO(false,"Purchase Order Doesn't Exist in S/4HANA Cloud System",hashMap);
         }
         if(purchaseOrder == null){
@@ -115,8 +115,7 @@ public class PurchaseController {
             hashMap.put("PurchaseOrderType",PurchaseOrderType);
             hashMap.put("Supplier",Supplier);
         }
-        String uploadDir = ResourceUtils.getURL("classpath:").getPath()+"static/images/";
-        hashMap.put("editImg", "data:image/jpeg;base64,"+ImgTool.transferToBase64(uploadDir+"/afterEdit.png"));
+        hashMap.put("editImg", redisService.getString("editImg"));
         return new AjaxVO(true,"success",hashMap);
     }
 
@@ -132,21 +131,22 @@ public class PurchaseController {
         String csrfToken = null;
         String etag = null;
         String result = null;
-        if(csrfToken == null) {
-            try {
+//        if(csrfToken == null) {
+//            try {
                 csrfToken = postGoodsReceiptService.getCsrfToken();
-            } catch (Exception e) {
-                return new AjaxVO(false, "can't get csrfToken", "");
-            }
-        }
-        try {
+//            } catch (Exception e) {
+//                return new AjaxVO(false, "can't get csrfToken", "");
+//            }
+//        }
+//        try {
             boolean putAway = postGoodsReceiptService.putAway(id,csrfToken);
-            if(putAway == false){
-                return new AjaxVO(false,"please check the inbound delivery num","");
-            }
-        }catch (IOException e){
-            return new AjaxVO(false,"can't put away","");
-        }
+            logger.info("putAway:"+putAway);
+//            if(putAway == false){
+//                return new AjaxVO(false,"please check the inbound delivery num","");
+//            }
+//        }catch (IOException e){
+//            return new AjaxVO(false,"can't put away","");
+//        }
         try {
             etag = postGoodsReceiptService.getEtagMatch(id,csrfToken);
         }catch (IOException e){

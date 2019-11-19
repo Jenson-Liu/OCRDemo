@@ -21,15 +21,11 @@ public class Demo1Application {
         SpringApplication.run(Demo1Application.class, args);
     }
 
-    /**
-     * 文件上传配置
-     * @return
-     */
-//    @Bean
-//    public MultipartConfigElement multipartConfigElement() {
-//        MultipartConfigFactory factory = new MultipartConfigFactory();
-//        factory.setMaxRequestSize("102400KB");
-//        return factory.createMultipartConfig();
-//    }
+    @Bean
+    MultipartConfigElement multipartConfigElement() {
+        MultipartConfigFactory factory = new MultipartConfigFactory();
+        factory.setLocation("/tmp/tomcat");
+        return factory.createMultipartConfig();
+    }
 
 }

@@ -16,10 +16,10 @@
     <script type="text/javascript" src="/innovation/axios.min.js"></script>
     <script src="/innovation/jquery.js"></script>
     <style>
-        #__image1 {
+        #__image1-cont0_1 {
             display: inline-block;
-            width: 200px;
-            height: 200px;
+            width: 240px;
+            height: 180px;
             overflow: hidden;
         }
     </style>
@@ -42,12 +42,12 @@
         });
 
         const oImage = new sap.m.Image({
-            width: "400px",
-            height: "400px",
+            width: "480px",
+            height: "360px",
         });
         const oImage2 = new sap.m.Image({
-            width: "400px",
-            height: "400px",
+            width: "480px",
+            height: "360px",
         });
 
         const oForm = new sap.ui.layout.form.SimpleForm({
@@ -82,8 +82,8 @@
                 const image = document.getElementById("__image0");
                 const options = {
                     aspectRatio: 16 / 9,
-                    // preview: '#__image1-cont0_1',
-                    preview: '#__image1',
+                    preview: '#__image1-cont0_1',
+                    // preview: '#__image1',
                     viewMode: 1
                 };
                 let cropper = new Cropper(image, options);

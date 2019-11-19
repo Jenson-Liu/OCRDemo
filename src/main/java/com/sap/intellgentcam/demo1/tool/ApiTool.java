@@ -59,17 +59,17 @@ public class ApiTool {
     /**
      * transfer img to order num
      * to get what view in img
-     * @param fileName
+     * @param file
      * @param access_token
      * @return
      * @throws IOException
      */
-    public static String TransferImg(String fileName, String access_token) throws IOException {
+    public static String TransferImg(File file, String access_token) throws IOException {
         OkHttpClient client =  new OkHttpClient().newBuilder().connectTimeout(30000, TimeUnit.MILLISECONDS)
                 .readTimeout(30000, TimeUnit.MILLISECONDS)
                 .build();
         String url = "https://mlftrial-fs-ocr.cfapps.eu10.hana.ondemand.com/api/v2/image/ocr";
-        File file =  new File(fileName);
+//        File file =  new File(fileName);
         RequestBody fileBody = RequestBody.create(MEDIA_TYPE_PNG,file);
         access_token = "Bearer "+access_token;
         RequestBody requestBody = new MultipartBody.Builder()

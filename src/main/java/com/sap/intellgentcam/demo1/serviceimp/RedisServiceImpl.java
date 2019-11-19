@@ -60,6 +60,6 @@ public class RedisServiceImpl implements RedisService {
 
     @Override
     public String getString(String key) {
-        return stringRedisTemplate.opsForValue().get("poNum");
+        return stringRedisTemplate.opsForValue().get(key);
     }
 }

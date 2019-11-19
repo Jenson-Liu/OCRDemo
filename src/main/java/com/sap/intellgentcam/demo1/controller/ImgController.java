@@ -31,15 +31,6 @@ import java.io.IOException;
 public class ImgController {
 
     private static final Logger logger = LoggerFactory.getLogger(ImgController.class);
-    private static String uploadDir;
-
-    static {
-        try {
-            uploadDir = ResourceUtils.getURL("classpath:").getPath()+"static/images/";
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
 
     @Autowired
     PurchaseService purchaseService;
@@ -59,7 +50,6 @@ public class ImgController {
     public void ImportImg(@RequestParam("href") String  href, HttpServletRequest request,HttpServletResponse response) {
         String img = href.substring(href.indexOf("base64,")+7);
         redisService.setImgBase64(href);
-        ImgTool.Base64ToImage(img,uploadDir+"/beforeEdit.png");
     }
 
     /**
@@ -83,8 +73,8 @@ public class ImgController {
         }
         redisService.setString("editImg",editImg);
         String img = editImg.substring(editImg.indexOf("base64,")+7);
-        ImgTool.Base64ToImage(img,uploadDir+"/afterEdit.png");
-        String order = ApiTool.TransferImg(uploadDir+"/afterEdit.png",access_token);
+        File ImgFile = ImgTool.Base64ToImage(img,"afterEdit.png");
+        String order = ApiTool.TransferImg(ImgFile,access_token);
         Gson gson = new Gson();
         JsonObject jsonObject = gson.fromJson(order,JsonObject.class);
         String poNum = String.valueOf(jsonObject.get("predictions"));
