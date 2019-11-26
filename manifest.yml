@@ -1,0 +1,16 @@
+---
+applications:
+
+  - name: Innovation
+    memory: 1024M
+    timeout: 300
+    random-route: true
+    path: target/demo1-0.0.1-SNAPSHOT.jar
+    buildpacks:
+      - sap_java_buildpack
+    env:
+      ALLOW_MOCKED_AUTH_HEADER: true
+      TARGET_RUNTIME: tomee7
+      SET_LOGGING_LEVEL: '{ROOT: INFO, com.sap.cloud.sdk: INFO}'
+      JBP_CONFIG_SAPJVM_MEMORY_SIZES: 'metaspace:128m..'
+#     cf set-env Innovation destinations '[{name:"ErpQueryEndpoint",url:"https://ccf-715.wdf.sap.corp",username:"_SAPI501695",password:"4EBZ##r8u1Y#JP-hbbgx" ,properties:[{key:"TrustAll",value:"true"},{key:"sap-client", value: "715"}]}]'

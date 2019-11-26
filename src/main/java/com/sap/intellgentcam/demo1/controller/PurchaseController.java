@@ -7,6 +7,7 @@ import com.sap.intellgentcam.demo1.service.PostGoodsReceiptService;
 import com.sap.intellgentcam.demo1.service.PurchaseService;
 import com.sap.intellgentcam.demo1.service.RedisService;
 import com.sap.intellgentcam.demo1.tool.ImgTool;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -131,26 +132,25 @@ public class PurchaseController {
         String csrfToken = null;
         String etag = null;
         String result = null;
-//        if(csrfToken == null) {
-//            try {
+        if(csrfToken == null) {
+            try {
                 csrfToken = postGoodsReceiptService.getCsrfToken();
-//            } catch (Exception e) {
-//                return new AjaxVO(false, "can't get csrfToken", "");
-//            }
-//        }
-//        try {
-            boolean putAway = postGoodsReceiptService.putAway(id,csrfToken);
-            logger.info("putAway:"+putAway);
-//            if(putAway == false){
-//                return new AjaxVO(false,"please check the inbound delivery num","");
-//            }
-//        }catch (IOException e){
-//            return new AjaxVO(false,"can't put away","");
-//        }
+            } catch (Exception e) {
+                return new AjaxVO(false, "can't get csrfToken", "");
+            }
+        }
+        try {
+            HashMap<String, Object> putAway = postGoodsReceiptService.putAway(id,csrfToken);
+            if((Boolean)putAway.get("result") == false){
+                return new AjaxVO(false,putAway.get("info").toString(),"");
+            }
+        }catch (IOException e){
+            return new AjaxVO(false,"please check the Inbound Delivery","");
+        }
         try {
             etag = postGoodsReceiptService.getEtagMatch(id,csrfToken);
         }catch (IOException e){
-            return new AjaxVO(false,"can't get etag","");
+            return new AjaxVO(false,"Please Check the Inbound Delivery","");
         }
         result = postGoodsReceiptService.postGoodsReceipt(id,csrfToken,etag);
         return new AjaxVO(true,result,"");
