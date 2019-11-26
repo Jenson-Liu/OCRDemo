@@ -3,16 +3,16 @@ server:
   max-http-header-size: 10000000
   tomcat:
     basedir: /tmp/tomcat
-  custom:
-    httpPort: 8890
-  servlet:
-    session:
-      timeout: 1800
-  ssl:
-    key-store: classpath:server.keystore
-    key-store-password: changeit
-    key-store-type: JKS
-    key-alias: tomcat
+#  custom:
+#    httpPort: 8890
+#  servlet:
+#    session:
+#      timeout: 1800
+#  ssl:
+#    key-store: classpath:server.keystore
+#    key-store-password: changeit
+#    key-store-type: JKS
+#    key-alias: tomcat
 spring:
   redis:
     database: 3           # Redis服务器数据库
