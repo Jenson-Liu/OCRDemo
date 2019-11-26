@@ -3,6 +3,7 @@ package com.sap.intellgentcam.demo1.service;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 /**
  * @author : Jenson.Liu
@@ -25,7 +26,7 @@ public interface PostGoodsReceiptService {
      * @return
      * @throws IOException
      */
-    public boolean putAway(String deliveryNum,String token) throws IOException;
+    public HashMap<String, Object> putAway(String deliveryNum, String token) throws IOException;
 
     /**
      * get etag to call api
@@ -38,10 +39,11 @@ public interface PostGoodsReceiptService {
 
     /**
      * post goods receipt
-      * @param deliveryNum
+     * @param deliveryNum
      * @param token
      * @param match
      * @return
+     * @throws IOException
      */
-    public String postGoodsReceipt(String deliveryNum,String token,String match);
+    public String postGoodsReceipt(String deliveryNum,String token,String match) throws IOException;
 }
