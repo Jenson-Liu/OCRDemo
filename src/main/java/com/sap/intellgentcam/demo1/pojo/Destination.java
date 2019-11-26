@@ -4,6 +4,7 @@ package com.sap.intellgentcam.demo1.pojo;
  * @author : Jenson.Liu
  * @date : 2019/10/29  10:49 上午
  */
+// useless
 public class Destination {
     String name;
     String url;
