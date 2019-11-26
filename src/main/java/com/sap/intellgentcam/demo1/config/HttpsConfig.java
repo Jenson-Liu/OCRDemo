@@ -29,7 +29,6 @@ public class HttpsConfig {
 
             @Override
             protected void postProcessContext(Context context) {
-
                 SecurityConstraint securityConstraint = new SecurityConstraint();
                 securityConstraint.setUserConstraint("CONFIDENTIAL");
                 SecurityCollection collection = new SecurityCollection();

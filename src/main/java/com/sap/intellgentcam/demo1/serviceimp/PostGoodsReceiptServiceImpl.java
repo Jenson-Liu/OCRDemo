@@ -54,9 +54,11 @@ public class PostGoodsReceiptServiceImpl implements PostGoodsReceiptService {
     }
 
     @Override
-    public boolean putAway(String deliveryNum,String token) throws IOException{
+    public HashMap<String, Object> putAway(String deliveryNum, String token) throws IOException{
         logger.info("deliveryNum:"+deliveryNum);
-        OkHttpClient client = new OkHttpClient.Builder().build();
+        OkHttpClient client = new OkHttpClient().newBuilder().connectTimeout(30000, TimeUnit.MILLISECONDS)
+                .readTimeout(30000, TimeUnit.MILLISECONDS)
+                .build();;
         String url = " https://ccf-715.wdf.sap.corp/sap/opu/odata/sap/API_INBOUND_DELIVERY_SRV;v=0002/ConfirmPutawayAllItems?DeliveryDocument=";
         url +="\'"+deliveryNum+"\'";
         HashMap<String,String> hashMap = AuthTool.getAuth();
@@ -78,25 +80,29 @@ public class PostGoodsReceiptServiceImpl implements PostGoodsReceiptService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        try {
-            logger.info("putAway success:"+response.isSuccessful());
-            logger.info("putAway body:"+response.body().string());
-            logger.info("putAway message:"+response.message());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-//        boolean result = true;
-//        try{
-//            response = client.newCall(request).execute();
+//        try {
+//            logger.info("putAway success:"+response.isSuccessful());
+//            logger.info("putAway body:"+response.body().string());
+//            logger.info("putAway message:"+response.message());
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-//        logger.info(String.valueOf(response.isSuccessful()));
-//        logger.info(response.body().string());
-//        result = ;
-//        logger.info("putAway success:"+result);
-        return response.isSuccessful();
+        boolean result = response.isSuccessful();
+        String info = null;
+        if(result == false){
+            String xmlStr = response.body().string();
+            int start = xmlStr.indexOf("<message xml:lang=\"en\">");
+            int end = xmlStr.indexOf(("</message>"),start);
+            String message = "<message xml:lang=\"en\">";
+            int length = message.length();
+            info = xmlStr.substring(start+length,end);
+            HashMap<String, Object> resultHash = new HashMap<>();
+        }
+
+        HashMap<String, Object> resultHash = new HashMap<>();
+        resultHash.put("result",result);
+        resultHash.put("info",info);
+        return resultHash;
     }
 
     @Override
@@ -127,7 +133,7 @@ public class PostGoodsReceiptServiceImpl implements PostGoodsReceiptService {
     }
 
     @Override
-    public String postGoodsReceipt(String deliveryNum,String token, String match) {
+    public String postGoodsReceipt(String deliveryNum,String token, String match) throws IOException {
         OkHttpClient client =  new OkHttpClient().newBuilder().connectTimeout(30000, TimeUnit.MILLISECONDS)
                 .readTimeout(30000, TimeUnit.MILLISECONDS)
                 .build();
@@ -156,11 +162,19 @@ public class PostGoodsReceiptServiceImpl implements PostGoodsReceiptService {
         boolean result = response.isSuccessful();
         logger.info("PGR:"+result);
         logger.info("PGR Info:"+response.body());
-
+        String info = null;
+        if (result == false){
+            String xmlStr = response.body().string();
+            int start = xmlStr.indexOf("<message xml:lang=\"en\">");
+            int end = xmlStr.indexOf(("</message>"),start);
+            String message = "<message xml:lang=\"en\">";
+            int length = message.length();
+            info = xmlStr.substring(start+length,end);
+        }
         if(result == true){
             return "Post Goods Receipt Successfully";
         }else {
-            return "Unable to Post Goods Receipt";
+            return info;
         }
     }
 }

@@ -21,22 +21,7 @@ import static org.junit.Assert.*;
 public class ApiToolTest {
 
     @Test
-    public void testApi() throws IOException {
-        OkHttpClient client = new OkHttpClient();
-        String key = "APIKey";
-        String value = "DLT385hy4A7GA4qEQkAm37BttUyEADWV";
-        String credential = Credentials.basic(key,value);
-        String url = "https://sandbox.api.sap.com/s4hanacloud/sap/opu/odata/sap/API_PURCHASEORDER_PROCESS_SRV/A_PurchaseOrder";
-        url += "(\'"+ "4500007924" + "\')";
-        Request request = new Request.Builder()
-                .url(url)
-                .header("APIKey","DLT385hy4A7GA4qEQkAm37BttUyEADWV")
-                .build();
-        Response response = client.newCall(request).execute();
-        if (!response.isSuccessful()) {
-            throw new IOException("server error: " + response);
-        }
-        System.out.println(response.body().string());
+    public void element() {
+        System.out.println("hello");
     }
-
 }

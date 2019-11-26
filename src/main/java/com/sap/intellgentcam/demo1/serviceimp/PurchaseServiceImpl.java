@@ -29,7 +29,7 @@ public class PurchaseServiceImpl implements PurchaseService {
     @Override
     public PurchaseOrder getPurchase(String poNum) throws ODataException{
         logger.info("ALLOW_MOCKED_AUTH_HEADER: " + System.getenv("ALLOW_MOCKED_AUTH_HEADER"));
-        logger.info("destinations: " + System.getenv("destinations"));
+        logger.info("Destinations: " + System.getenv("Destinations"));
 
         String destinations = "ErpQueryEndpoint";
         ErpConfigContext erpConfigContext = new ErpConfigContext("ErpQueryEndpoint");
@@ -50,7 +50,7 @@ public class PurchaseServiceImpl implements PurchaseService {
                                 PurchaseOrder.PURCHASING_COMPLETENESS_STATUS,
                                 PurchaseOrder.PURCHASING_PROCESSING_STATUS )
                         .filter(PurchaseOrder.PURCHASE_ORDER.eq(poNum))
-                        .execute(erpConfigContext);
+                        .execute();
 
         if(purchaseOrder.size()>=1){
             System.out.println(purchaseOrder.get(0).toString());

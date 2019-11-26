@@ -1,9 +1,21 @@
 package com.sap.intellgentcam.demo1.controller;
 
+import com.sap.intellgentcam.demo1.service.PurchaseServiceApi;
+import com.sap.intellgentcam.demo1.tool.XmlTool;
+import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * @author : Jenson.Liu
@@ -15,10 +27,8 @@ public class InnovationController {
 
     private static final Logger logger = LoggerFactory.getLogger(InnovationController.class);
 
-    @RequestMapping(value = "/camera",method = RequestMethod.GET)
-    public String GetStart(){
-        return "Camera/camera";
-    }
+    @Autowired
+    PurchaseServiceApi purchaseServiceApi;
 
     @RequestMapping(value = "/index",method = RequestMethod.GET)
     public String GetStart2(){
@@ -40,9 +50,12 @@ public class InnovationController {
         return "Camera/cropper.html";
     }
 
-//    @RequestMapping(value = "/index",method = RequestMethod.GET)
-//    public String video(){
-//        return "Camera/loading.html";
-//    }
+    @ResponseBody
+    @RequestMapping(value = "/getPoNum",method = RequestMethod.GET)
+    public String video(@RequestParam("poNum")String poNum) throws IOException {
+        logger.info("poNum:"+poNum);
+        purchaseServiceApi.getPurchase(poNum);
+        return "hello";
+    }
 }
 
